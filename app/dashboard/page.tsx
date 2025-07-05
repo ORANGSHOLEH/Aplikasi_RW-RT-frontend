@@ -117,7 +117,7 @@ export default function Dashboard() {
         localStorage.removeItem('userNik');
         const timer = setTimeout(() => {
           router.push('/login');
-        }, 2000);
+        }, 200);
         return () => clearTimeout(timer);
       } else {
         setError('Gagal memuat data dashboard. Terjadi kesalahan.');
@@ -417,7 +417,7 @@ export default function Dashboard() {
                         <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm">⚠️ Terbatas</span>
                       </td>
                       <td className="border p-3 text-center">
-                        <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-sm">❌ Tidak</span>
+                        <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-sm">❌ Tidak</span>
                       </td>
                     </tr>
                     <tr>
@@ -432,7 +432,7 @@ export default function Dashboard() {
                         <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm">⚠️ Terbatas</span>
                       </td>
                       <td className="border p-3 text-center">
-                        <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-sm">❌ Tidak</span>
+                        <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-sm">❌ Tidak</span>
                       </td>
                     </tr>
                   </tbody>
