@@ -1,89 +1,83 @@
-'use client'; // Jika menggunakan App Router Next.js 13+
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // atau 'next/router' untuk Pages Router
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { API_BASE_URL, API_ENDPOINTS } from "../lib/config";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const router = useRouter();
 
-  // API Base URL - sesuaikan dengan NGROK URL Anda
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.0.107:8000/api';
-
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch(`${API_BASE_URL}/login`, {
-        method: 'POST',
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.LOGIN}`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
-      if (data.status === 'success') {
-        // Simpan token dan user data
-        localStorage.setItem('token', data.data.token);
-        localStorage.setItem('user', JSON.stringify(data.data.user));
-        
-        // Redirect ke dashboard
-        router.push('/dashboard');
+      if (data.status === "success") {
+        localStorage.setItem("token", data.data.token);
+        localStorage.setItem("user", JSON.stringify(data.data.user));
+        router.push("/dashboard");
       } else {
-        // Handle error dengan pesan yang informatif
         setError(getErrorMessage(data));
       }
     } catch (err) {
-      setError('Terjadi kesalahan koneksi. Periksa koneksi internet Anda.');
-      console.error('Login error:', err);
+      setError("Terjadi kesalahan koneksi. Periksa koneksi internet Anda.");
+      console.error("Login error:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  const getErrorMessage = (data) => {
+  const getErrorMessage = (data : { error_type: string; errors?: Record<string, string[]>; retry_after?: number; message?: string; }) => {
     switch (data.error_type) {
-      case 'email_not_found':
-        return 'Email tidak terdaftar. Periksa kembali email Anda.';
-      case 'wrong_password':
-        return 'Password salah. Gunakan fitur lupa password jika tidak ingat.';
-      case 'validation_error':
+      case "email_not_found":
+        return "Email tidak terdaftar. Periksa kembali email Anda.";
+      case "wrong_password":
+        return "Password salah. Gunakan fitur lupa password jika tidak ingat.";
+      case "validation_error":
         const errors = data.errors;
-        return Object.values(errors).flat().join(', ');
-      case 'rate_limit_exceeded':
+        return Object.values(errors).flat().join(", ");
+      case "rate_limit_exceeded":
         return `Terlalu banyak percobaan. Coba lagi dalam ${data.retry_after} detik.`;
       default:
-        return data.message || 'Terjadi kesalahan saat login.';
+        return data.message || "Terjadi kesalahan saat login.";
     }
   };
 
   // Quick login buttons untuk testing
-  const quickLogin = (role) => {
+  const quickLogin = (role : string) => {
     const credentials = {
-      admin: { email: 'admin@rwrt.com', password: 'password' },
-      ketua_rw: { email: 'rw01@rwrt.com', password: 'password' },
-      ketua_rt: { email: 'rt01@rwrt.com', password: 'password' },
-      warga: { email: 'warga@rwrt.com', password: 'password' }
+      admin: { email: "admin@rwrt.com", password: "password" },
+      ketua_rw: { email: "rw01@rwrt.com", password: "password" },
+      ketua_rt: { email: "rt01@rwrt.com", password: "password" },
+      warga: { email: "warga@rwrt.com", password: "password" },
     };
-    
+
     setFormData(credentials[role]);
   };
 
@@ -97,7 +91,9 @@ export default function LoginPage() {
               <span className="text-white text-xl font-bold">🏠</span>
             </div>
             <h2 className="text-3xl font-bold text-gray-900">Sistem RW-RT</h2>
-            <p className="text-gray-600 mt-2">Silakan login untuk melanjutkan</p>
+            <p className="text-gray-600 mt-2">
+              Silakan login untuk melanjutkan
+            </p>
           </div>
 
           {/* Error Alert */}
@@ -114,7 +110,10 @@ export default function LoginPage() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Email
               </label>
               <input
@@ -130,14 +129,17 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Password
               </label>
               <div className="relative">
                 <input
                   id="password"
                   name="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   required
                   className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-10"
                   placeholder="Masukkan password Anda"
@@ -169,35 +171,37 @@ export default function LoginPage() {
                   Logging in...
                 </div>
               ) : (
-                'Login'
+                "Login"
               )}
             </button>
           </form>
 
           {/* Quick Login Buttons untuk Testing */}
           <div className="mt-8 pt-6 border-t border-gray-200">
-            <p className="text-center text-sm text-gray-600 mb-4">Quick Login (untuk testing):</p>
+            <p className="text-center text-sm text-gray-600 mb-4">
+              Quick Login (untuk testing):
+            </p>
             <div className="grid grid-cols-2 gap-2">
               <button
-                onClick={() => quickLogin('admin')}
+                onClick={() => quickLogin("admin")}
                 className="px-3 py-2 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200"
               >
                 Admin
               </button>
               <button
-                onClick={() => quickLogin('ketua_rw')}
+                onClick={() => quickLogin("ketua_rw")}
                 className="px-3 py-2 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
               >
                 Ketua RW
               </button>
               <button
-                onClick={() => quickLogin('ketua_rt')}
+                onClick={() => quickLogin("ketua_rt")}
                 className="px-3 py-2 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
               >
                 Ketua RT
               </button>
               <button
-                onClick={() => quickLogin('warga')}
+                onClick={() => quickLogin("warga")}
                 className="px-3 py-2 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
               >
                 Warga
