@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { API_BASE_URL, API_ENDPOINTS } from "../lib/config";
+import Navbar from "../components/ui/Navbar";
+import Footer from "../components/ui/Footer";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -31,7 +33,7 @@ export default function Dashboard() {
     setUser(JSON.parse(userData));
   };
 
-  const apiCall = async (endpoint : string, options = {}) => {
+  const apiCall = async (endpoint: string, options = {}) => {
     const token = localStorage.getItem("token");
     const fullUrl = `${API_BASE_URL}${endpoint}`;
     try {
@@ -151,40 +153,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
-              <div className="h-8 w-8 bg-indigo-600 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-white text-sm font-bold">🏠</span>
-              </div>
-              <h1 className="text-2xl font-bold text-gray-900">Sistem RW-RT</h1>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">
-                  {user?.name}
-                </p>
-                <span
-                  className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleBadgeColor(
-                    user?.role
-                  )}`}
-                >
-                  {getRoleDisplayName(user?.role)}
-                </span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar user={user} onLogout={handleLogout} />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -410,6 +379,7 @@ export default function Dashboard() {
           )}
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

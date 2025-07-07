@@ -53,7 +53,12 @@ export default function LoginPage() {
     }
   };
 
-  const getErrorMessage = (data : { error_type: string; errors?: Record<string, string[]>; retry_after?: number; message?: string; }) => {
+  const getErrorMessage = (data: {
+    error_type: string;
+    errors?: Record<string, string[]>;
+    retry_after?: number;
+    message?: string;
+  }) => {
     switch (data.error_type) {
       case "email_not_found":
         return "Email tidak terdaftar. Periksa kembali email Anda.";
@@ -61,7 +66,7 @@ export default function LoginPage() {
         return "Password salah. Gunakan fitur lupa password jika tidak ingat.";
       case "validation_error":
         const errors = data.errors;
-        return Object.values(errors).flat().join(", ");
+        return Object.values(errors || {}).flat().join(", ");
       case "rate_limit_exceeded":
         return `Terlalu banyak percobaan. Coba lagi dalam ${data.retry_after} detik.`;
       default:
@@ -70,8 +75,8 @@ export default function LoginPage() {
   };
 
   // Quick login buttons untuk testing
-  const quickLogin = (role : string) => {
-    const credentials = {
+  const quickLogin = (role: string) => {
+    const credentials: Record<string, { email: string; password: string }> = {
       admin: { email: "admin@rwrt.com", password: "password" },
       ketua_rw: { email: "rw01@rwrt.com", password: "password" },
       ketua_rt: { email: "rt01@rwrt.com", password: "password" },
@@ -121,7 +126,7 @@ export default function LoginPage() {
                 name="email"
                 type="email"
                 required
-                className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-3 text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 placeholder="Masukkan email Anda"
                 value={formData.email}
                 onChange={handleChange}
@@ -141,7 +146,7 @@ export default function LoginPage() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   required
-                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-10"
+                  className="w-full px-3 py-3 text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-10"
                   placeholder="Masukkan password Anda"
                   value={formData.password}
                   onChange={handleChange}
