@@ -1,25 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
-interface NavbarProps {
-  user?: {
-    name: string;
-    role: string;
-  } | null;
-  onLogout?: () => void;
-}
-
-export default function Navbar({ user, onLogout }: NavbarProps) {
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   const navItems = [
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/dashboard?tab=kk", label: "Data KK" },
-    { href: "/dashboard?tab=warga", label: "Data Warga" },
+    { href: "/", label: "Home" },
+    { href: "/keuangan", label: "Keuangan" },
+    { href: "/berita", label: "Berita" },
+    { href: "/lowongan-kerja", label: "Loker" },
+    { href: "/umkm", label: "UMKM" },
   ];
 
   const getRoleBadgeColor = (role: string) => {
@@ -39,10 +34,10 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/dashboard" className="flex items-center">
-              <div className="h-8 w-8 bg-indigo-600 rounded-lg flex items-center justify-center mr-3">
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center mr-3">
                 <span className="text-white text-sm font-bold">🏠</span>
               </div>
-              <h1 className="text-xl font-bold text-gray-900">Sistem RW-RT</h1>
+              <h1 className="text-xl font-bold text-gray-900">RW16 Ciwaruga</h1>
             </Link>
           </div>
 
@@ -53,35 +48,17 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    pathname === item.href
+                      ? "text-black underline"
+                      : "text-black hover:underline"
+                  }`}
                 >
                   {item.label}
                 </Link>
               ))}
             </div>
           </div>
-
-          {/* User Menu */}
-          {user && (
-            <div className="hidden md:flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                <span
-                  className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleBadgeColor(
-                    user.role
-                  )}`}
-                >
-                  {user.role}
-                </span>
-              </div>
-              <button
-                onClick={onLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          )}
 
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -123,23 +100,16 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-gray-600 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium"
+                  className={`block px-3 py-2 rounded-md text-base font-medium ${
+                    pathname === item.href
+                      ? "text-indigo-600 underline"
+                      : "text-gray-600 hover:text-indigo-600"
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
                 </Link>
               ))}
-              {user && (
-                <button
-                  onClick={() => {
-                    onLogout?.();
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full text-left text-red-600 hover:text-red-700 block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Logout
-                </button>
-              )}
             </div>
           </div>
         )}
