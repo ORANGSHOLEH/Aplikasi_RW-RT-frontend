@@ -178,9 +178,7 @@ export default function UMKMPage() {
       <div className="min-h-screen bg-gray-100">
         <div className="p-8 bg-gray-100">
           <h1 className="text-3xl text-black font-bold">UMKM</h1>
-          <p className="text-black">
-            Welcome to the UMKM application. Here you can manage your UMKM data.
-          </p>
+          <p className="text-black"></p>
         </div>
 
         <div className="container mx-auto px-8">
@@ -212,6 +210,9 @@ export default function UMKMPage() {
                       <p className="text-gray-600 text-sm">
                         {item.description}
                       </p>
+                      <a href={`/umkm/${item.id}`} className="text-black">
+                        Lihat Detail 🏪
+                      </a>
                     </div>
                   </div>
                 ))}
