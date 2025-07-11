@@ -46,18 +46,7 @@ export default function UMKMPage() {
     <>
       <Navbar />
       <div className="min-h-screen bg-gray-100">
-        <main className="p-8">
-          <Image
-            src="/umkm-logo.png"
-            alt="UMKM Logo"
-            width={150}
-            height={50}
-            className="mb-4"
-          />
-          <p className="text-gray-700">
-            Welcome to the UMKM application. Here you can manage your UMKM data.
-          </p>
-        </main>
+        <h1 className="text-3xl text-black font-bold p-8">UMKM RW16</h1>
       </div>
     </>
   );
