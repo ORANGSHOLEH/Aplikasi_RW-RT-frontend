@@ -39,9 +39,6 @@ const jabatan = ['Kepala Desa', 'Badan Desa', 'Tangan Desa', 'Kaki Desa'];
     </div>
   </div>
 </div>
-
-
-
      <div className="py-20 bg-white px-6">
       <h3 className="text-xl text-black font-bold text-center mb-6">Struktur Organisasi dan Tata Kerja</h3>
       <br/>
