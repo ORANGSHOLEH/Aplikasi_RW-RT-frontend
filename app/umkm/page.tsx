@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Navbar from "../components/ui/Navbar";
+import Footer from "../components/ui/Footer";
 import Image from "next/image";
 
 interface UMKMItem {
@@ -270,6 +271,7 @@ export default function UMKMPage() {
             </>
           )}
         </div>
+        <Footer />
       </div>
     </>
   );
