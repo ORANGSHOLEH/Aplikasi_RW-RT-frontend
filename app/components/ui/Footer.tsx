@@ -1,30 +1,32 @@
-
-
+"use client";
 import { useState } from 'react';
 import Link from "next/link";
-
-// Impor ikon dari Font Awesome melalui react-icons
 import {
   FaMapMarkerAlt, FaPhone, FaEnvelope, FaInstagram, FaYoutube, FaFacebook,
   FaHospital, FaBaby, FaBriefcaseMedical, FaShieldAlt, FaFireExtinguisher,
   FaLandmark, FaGlobeAsia, FaMapMarkedAlt, FaVoteYea, FaPlus, FaMinus
 } from 'react-icons/fa';
 
+// Define types for FooterSection props
+interface FooterSectionProps {
+  title: string;
+  children: React.ReactNode;
+  isOpen: boolean;
+  onClick: () => void;
+}
+
 // Komponen untuk setiap item di akordeon/footer
-const FooterSection = ({ title, children, isOpen, onClick }) => (
+const FooterSection = ({ title, children, isOpen, onClick }: FooterSectionProps) => (
   <div>
-    {/* Header yang bisa diklik di mobile */}
     <h3
       className="font-bold text-lg mb-4 flex justify-between items-center md:cursor-default cursor-pointer"
       onClick={onClick}
     >
       {title}
-      {/* Tampilkan ikon +/- hanya di mobile */}
       <span className="md:hidden text-xl">
         {isOpen ? <FaMinus /> : <FaPlus />}
       </span>
     </h3>
-    {/* Konten yang bisa disembunyikan/ditampilkan */}
     <div className={`${isOpen ? 'block' : 'hidden'} md:block`}>
       {children}
     </div>
@@ -33,18 +35,16 @@ const FooterSection = ({ title, children, isOpen, onClick }) => (
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  // State untuk mengontrol akordeon yang sedang terbuka di mobile
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const handleToggle = (index) => {
-    // Jika index yang sama diklik lagi, tutup. Jika tidak, buka yang baru.
+  const handleToggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const footerLinksClass = "flex items-center gap-3 hover:text-gray-200 mb-2 text-base";
+  const footerLinksClass = "flex items-center gap-3 hover:text-emerald-400 mb-2 text-base";
 
   return (
-    <footer className="bg-[#0683b6] text-white pt-8 pb-4 px-4">
+    <footer className="bg-gradient-to-t from-emerald-50 to-white text-gray-700 pt-8 pb-4 px-4">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 md:gap-10">
 
         {/* 1. Alamat */}
@@ -60,8 +60,12 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* 2. Hubungi Kami (Accordion di Mobile) */}
-        <FooterSection title="Hubungi Kami" isOpen={openIndex === 1} onClick={() => handleToggle(1)}>
+        {/* 2. Hubungi Kami */}
+        <FooterSection 
+          title="Hubungi Kami" 
+          isOpen={openIndex === 1} 
+          onClick={() => handleToggle(1)}
+        >
           <div className="space-y-2">
             <p className={footerLinksClass}>
               <FaPhone />
@@ -72,15 +76,19 @@ export default function Footer() {
               <span className="break-all">desaciwaruga0205@gmail.com</span>
             </p>
             <div className="flex space-x-4 pt-2 text-2xl">
-              <a href="#" aria-label="Instagram" className="hover:text-gray-200"><FaInstagram /></a>
-              <a href="#" aria-label="Facebook" className="hover:text-gray-200"><FaFacebook /></a>
-              <a href="#" aria-label="YouTube" className="hover:text-gray-200"><FaYoutube /></a>
+              <a href="#" aria-label="Instagram" className="hover:text-emerald-400"><FaInstagram /></a>
+              <a href="#" aria-label="Facebook" className="hover:text-emerald-400"><FaFacebook /></a>
+              <a href="#" aria-label="YouTube" className="hover:text-emerald-400"><FaYoutube /></a>
             </div>
           </div>
         </FooterSection>
 
-        {/* 3. Nomor Telepon Penting (Accordion di Mobile) */}
-        <FooterSection title="Nomor Telepon Penting" isOpen={openIndex === 2} onClick={() => handleToggle(2)}>
+        {/* 3. Nomor Telepon Penting */}
+        <FooterSection 
+          title="Nomor Telepon Penting" 
+          isOpen={openIndex === 2} 
+          onClick={() => handleToggle(2)}
+        >
           <div className="space-y-2">
             <Link href="#" className={footerLinksClass}><FaHospital /> Rumah Sakit</Link>
             <Link href="#" className={footerLinksClass}><FaBaby /> Posyandu</Link>
@@ -90,8 +98,12 @@ export default function Footer() {
           </div>
         </FooterSection>
 
-        {/* 4. Jelajahi (Accordion di Mobile) */}
-        <FooterSection title="Jelajahi" isOpen={openIndex === 3} onClick={() => handleToggle(3)}>
+        {/* 4. Jelajahi */}
+        <FooterSection 
+          title="Jelajahi" 
+          isOpen={openIndex === 3} 
+          onClick={() => handleToggle(3)}
+        >
           <div className="space-y-2">
             <Link href="#" className={footerLinksClass}><FaLandmark /> Website Kemendesa</Link>
             <Link href="#" className={footerLinksClass}><FaLandmark /> Website Kemendagri</Link>
@@ -105,14 +117,8 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="mt-10 border-t border-white/20 pt-4 text-center text-base">
-        © {currentYear} Powered by PT Digital Desa Indonesia
+        © {currentYear} Powered by Desa Ciwaruga. All rights reserved.
       </div>
     </footer>
   );
-};
-
-
-
-
-
-
+}
