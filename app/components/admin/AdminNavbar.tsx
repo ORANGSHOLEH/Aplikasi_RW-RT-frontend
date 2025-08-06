@@ -31,11 +31,11 @@ export default function AdminNavbar({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <h1 className="text-lg font-semibold">Admin Dashboard</h1>
+        <h1 className="text-lg text-black font-semibold">Admin Dashboard</h1>
         <div className="flex items-center space-x-4">
           {user && (
             <>
-              <span className="text-sm hidden sm:inline">{user.name}</span>
+              <span className="text-sm hidden text-black sm:inline">{user.name}</span>
               <button 
                 onClick={onLogout}
                 className="text-sm text-red-600 hover:text-red-800"
