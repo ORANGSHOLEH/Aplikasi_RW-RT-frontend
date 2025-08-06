@@ -10,116 +10,41 @@ interface UMKMItem {
   name: string;
   description: string;
   image: string;
+  contact: string;
+  address: string;
 }
 
 export default function UMKMPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
   const [loading, setLoading] = useState(false);
+  const [allUMKMData, setAllUMKMData] = useState<UMKMItem[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
-  // Data dummy - nanti akan diganti dengan API call
-  const allUMKMData: UMKMItem[] = [
-    {
-      id: 1,
-      name: "Toko Sembako Barokah",
-      description:
-        "Menyediakan kebutuhan sembako sehari-hari dengan harga terjangkau dan kualitas terbaik.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 2,
-      name: "Warung Makan Sederhana",
-      description:
-        "Hidangan rumahan yang lezat dengan cita rasa autentik dan harga ramah di kantong.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 3,
-      name: "Laundry Express",
-      description:
-        "Jasa laundry kiloan dengan pelayanan cepat dan bersih untuk kebutuhan cucian Anda.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 4,
-      name: "Toko Kue Manis",
-      description:
-        "Aneka kue basah dan kering dengan resep tradisional yang telah teruji lezat.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 5,
-      name: "Bengkel Motor Jaya",
-      description:
-        "Servis motor profesional dengan teknisi berpengalaman dan spare part original.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 6,
-      name: "Toko Baju Fashion",
-      description:
-        "Koleksi pakaian trendy dan berkualitas untuk pria dan wanita dengan harga terjangkau.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 7,
-      name: "Salon Kecantikan Elok",
-      description:
-        "Layanan perawatan kecantikan lengkap dengan peralatan modern dan terapis profesional.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 8,
-      name: "Toko Elektronik Murah",
-      description:
-        "Penjualan peralatan elektronik dengan harga kompetitif dan garansi resmi.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 9,
-      name: "Kedai Kopi Hangat",
-      description:
-        "Menyajikan kopi premium dengan suasana hangat dan nyaman untuk bersantai.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 10,
-      name: "Toko Buku Pintar",
-      description:
-        "Koleksi buku lengkap mulai dari buku pelajaran hingga novel terbaru.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 11,
-      name: "Apotek Sehat",
-      description:
-        "Apotek lengkap dengan obat-obatan dan vitamin untuk kesehatan keluarga.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 12,
-      name: "Toko Sepatu Berkualitas",
-      description:
-        "Koleksi sepatu untuk segala usia dengan model terkini dan harga terjangkau.",
-      image: "/umkm1.jpeg",
-    },
-  ];
-
-  // Fungsi untuk mengambil data - nanti akan diganti dengan API call
+  // Fungsi untuk mengambil data dari API
   const fetchUMKMData = async (page: number) => {
     setLoading(true);
-    // Simulasi loading
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    setLoading(false);
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/umkm?page=${page}&per_page=${itemsPerPage}`
+      );
+      const data = await response.json();
+      
+      setAllUMKMData(data.data);
+      setCurrentPage(data.current_page);
+      setTotalPages(data.last_page);
+      setTotalItems(data.total);
+    } catch (error) {
+      console.error("Error fetching UMKM data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Menghitung data untuk halaman saat ini
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = allUMKMData.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Menghitung total halaman
-  const totalPages = Math.ceil(allUMKMData.length / itemsPerPage);
 
   // Fungsi untuk pindah halaman
   const goToPage = (pageNumber: number) => {
@@ -171,7 +96,7 @@ export default function UMKMPage() {
 
   useEffect(() => {
     fetchUMKMData(currentPage);
-  }, [currentPage]);
+  }, []);
 
   return (
     <>
@@ -194,7 +119,7 @@ export default function UMKMPage() {
             <>
               {/* UMKM Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {currentItems.map((item) => (
+                {allUMKMData.map((item) => (
                   <div
                     key={item.id}
                     className="bg-white rounded-lg shadow-md overflow-hidden"
@@ -213,61 +138,71 @@ export default function UMKMPage() {
                       <p className="text-gray-600 text-sm">
                         {item.description}
                       </p>
+                      <p className="text-gray-600 text-sm mt-2">
+                        <strong>Contact:</strong> {item.contact}
+                      </p>
+                      <p className="text-gray-600 text-sm">
+                        <strong>Address:</strong> {item.address}
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Pagination */}
-              <div className="flex justify-center items-center space-x-2 py-8">
-                {/* Previous Button */}
-                <button
-                  onClick={goToPrevPage}
-                  disabled={currentPage === 1}
-                  className={`px-3 py-2 rounded-md ${
-                    currentPage === 1
-                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
-                  }`}
-                >
-                  ⏮
-                </button>
+              {totalPages > 1 && (
+                <>
+                  <div className="flex justify-center items-center space-x-2 py-8">
+                    {/* Previous Button */}
+                    <button
+                      onClick={goToPrevPage}
+                      disabled={currentPage === 1}
+                      className={`px-3 py-2 rounded-md ${
+                        currentPage === 1
+                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
+                      }`}
+                    >
+                      ⏮
+                    </button>
 
-                {/* Page Numbers */}
-                {getPageNumbers().map((pageNumber) => (
-                  <button
-                    key={pageNumber}
-                    onClick={() => goToPage(pageNumber)}
-                    className={`px-3 py-2 rounded-md ${
-                      currentPage === pageNumber
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
-                    }`}
-                  >
-                    {pageNumber}
-                  </button>
-                ))}
+                    {/* Page Numbers */}
+                    {getPageNumbers().map((pageNumber) => (
+                      <button
+                        key={pageNumber}
+                        onClick={() => goToPage(pageNumber)}
+                        className={`px-3 py-2 rounded-md ${
+                          currentPage === pageNumber
+                            ? "bg-blue-500 text-white"
+                            : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
+                        }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    ))}
 
-                {/* Next Button */}
-                <button
-                  onClick={goToNextPage}
-                  disabled={currentPage === totalPages}
-                  className={`px-3 py-2 rounded-md ${
-                    currentPage === totalPages
-                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
-                  }`}
-                >
-                  ⏭
-                </button>
-              </div>
+                    {/* Next Button */}
+                    <button
+                      onClick={goToNextPage}
+                      disabled={currentPage === totalPages}
+                      className={`px-3 py-2 rounded-md ${
+                        currentPage === totalPages
+                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
+                      }`}
+                    >
+                      ⏭
+                    </button>
+                  </div>
 
-              {/* Pagination Info */}
-              <div className="text-center text-gray-600 pb-8">
-                Menampilkan {indexOfFirstItem + 1} sampai{" "}
-                {Math.min(indexOfLastItem, allUMKMData.length)} dari{" "}
-                {allUMKMData.length} hasil
-              </div>
+                  {/* Pagination Info */}
+                  <div className="text-center text-gray-600 pb-8">
+                    Menampilkan {indexOfFirstItem + 1} sampai{" "}
+                    {Math.min(indexOfLastItem, totalItems)} dari{" "}
+                    {totalItems} hasil
+                  </div>
+                </>
+              )}
             </>
           )}
         </div>
