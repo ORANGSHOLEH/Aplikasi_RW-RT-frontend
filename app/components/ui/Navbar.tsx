@@ -11,11 +11,14 @@ export default function Navbar() {
 
   const navItems = [
     { href: "/", label: "Home" },
+    { href: "/profil", label: "Profil Desa" },
     { href: "/keuangan", label: "Keuangan" },
     { href: "/berita", label: "Berita" },
     { href: "/lowongan-kerja", label: "Loker" },
     { href: "/umkm", label: "UMKM" },
+  
   ];
+
 
   const getRoleBadgeColor = (role: string) => {
     const colors = {
