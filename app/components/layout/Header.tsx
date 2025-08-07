@@ -7,6 +7,7 @@ export default function Header() {
         <h1 className="font-bold text-lg">MyDesa</h1>
         <nav className="space-x-4">
           <a href="#home" className="hover:underline">Home</a>
+          <a href="#home" className="hover:underline">Profil Desa</a>
           <a href="#info" className="hover:underline">Keuangan</a>
           <a href="#sambutan" className="hover:underline">Berita</a>
           <a href="#struktur" className="hover:underline">Loker</a>
