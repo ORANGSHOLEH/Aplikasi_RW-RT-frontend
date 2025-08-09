@@ -24,6 +24,15 @@ export const API_ENDPOINTS = {
   WARGA_UPDATE: (id) => `/warga/${id}`,
   WARGA_DELETE: (id) => `/warga/${id}`,
 
+  // Loker endpoints
+  LOKER: "/loker",
+  LOKER_STORE: "/loker",
+  LOKER_SHOW: (id) => `/loker/${id}`,
+  LOKER_UPDATE: (id) => `/loker/${id}`,
+  LOKER_DELETE: (id) => `/loker/${id}`,
+  LOKER_UPLOAD_IMAGE: "/loker-upload-image",
+  LOKER_FILTER_OPTIONS: "/loker-filter-options",
+
   // Laravel Sanctum
   CSRF_COOKIE: "/sanctum/csrf-cookie",
 };
