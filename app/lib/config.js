@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
   LOGIN: "/login",
   LOGOUT: "/logout",
   PROFILE: "/profile",
+  UMKM: '/umkm',
 
   // Health check
   HEALTH: "/health",
@@ -45,3 +46,5 @@ export const HTTP_METHODS = {
   PATCH: "PATCH",
   DELETE: "DELETE",
 };
+
+
