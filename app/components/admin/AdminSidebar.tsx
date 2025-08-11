@@ -1,13 +1,13 @@
 "use client";
 
-import { 
-  HomeIcon, 
-  UsersIcon, 
-  DocumentTextIcon, 
+import {
+  HomeIcon,
+  UsersIcon,
+  DocumentTextIcon,
   ShoppingBagIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  UserCircleIcon
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { Tooltip } from "../ui/Tooltip";
 
@@ -18,30 +18,40 @@ type AdminSidebarProps = {
   onToggleCollapse: () => void;
 };
 
-export default function AdminSidebar({ 
-  activeTab, 
-  onTabChange, 
+export default function AdminSidebar({
+  activeTab,
+  onTabChange,
   collapsed,
-  onToggleCollapse 
+  onToggleCollapse,
 }: AdminSidebarProps) {
   const navItems = [
-    { name: "Dashboard", tab: "profile", icon: HomeIcon },
-    { name: "Data KK", tab: "kk", icon: DocumentTextIcon },
-    { name: "Data Warga", tab: "warga", icon: UsersIcon },
+    { name: "Dashboard", tab: "dashboard", icon: HomeIcon },
+    // { name: "Data KK", tab: "kk", icon: DocumentTextIcon },
+    // { name: "Data Warga", tab: "warga", icon: UsersIcon },
     { name: "UMKM", tab: "umkm", icon: ShoppingBagIcon },
+    { name: "Loker", tab: "loker", icon: DocumentTextIcon },
+    { name: "Profile", tab: "profile", icon: UserCircleIcon },
   ];
 
   return (
-    <div className={`bg-gray-800 text-white h-full fixed transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
+    <div
+      className={`bg-gray-800 text-white h-full fixed transition-all duration-300 ${
+        collapsed ? "w-20" : "w-64"
+      }`}
+    >
       {/* Header */}
-      <div className={`p-4 border-b border-gray-700 flex items-center ${collapsed ? 'justify-center' : 'justify-between'}`}>
+      <div
+        className={`p-4 border-b border-gray-700 flex items-center ${
+          collapsed ? "justify-center" : "justify-between"
+        }`}
+      >
         {!collapsed && (
           <div>
             <h1 className="text-xl font-bold">RW16 Ciwaruga</h1>
             <p className="text-sm text-gray-400">Admin Dashboard</p>
           </div>
         )}
-        <button 
+        <button
           onClick={onToggleCollapse}
           className="text-gray-400 hover:text-white"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -53,7 +63,7 @@ export default function AdminSidebar({
           )}
         </button>
       </div>
-      
+
       {/* Navigation */}
       <nav className="p-4">
         <ul className="space-y-2">
@@ -68,10 +78,10 @@ export default function AdminSidebar({
                       : "text-gray-300 hover:bg-gray-700"
                   }`}
                 >
-                  <item.icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : 'mr-3'}`} />
-                  {!collapsed && (
-                    <span className="truncate">{item.name}</span>
-                  )}
+                  <item.icon
+                    className={`h-5 w-5 ${collapsed ? "mx-auto" : "mr-3"}`}
+                  />
+                  {!collapsed && <span className="truncate">{item.name}</span>}
                 </button>
               </Tooltip>
             </li>
