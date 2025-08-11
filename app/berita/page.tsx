@@ -5,172 +5,118 @@ import Navbar from "../components/ui/Navbar";
 import Footer from "../components/ui/Footer";
 import Image from "next/image";
 
-interface UMKMItem {
+interface NewsItem {
   id: number;
-  name: string;
-  description: string;
+  title: string;
+  content: string;
   image: string;
+  date: string;
 }
 
-export default function UMKMPage() {
+export default function NewsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
   const [loading, setLoading] = useState(false);
 
-  // Data dummy - nanti akan diganti dengan API call
-  const allUMKMData: UMKMItem[] = [
+  // Data dummy berita
+  const allNewsData: NewsItem[] = [
     {
       id: 1,
-      name: "Toko Sembako Barokah",
-      description:
-        "Menyediakan kebutuhan sembako sehari-hari dengan harga terjangkau dan kualitas terbaik.",
-      image: "/umkm1.jpeg",
+      title: "Pemerintah Luncurkan Program UMKM Go Digital",
+      content:
+        "Program ini bertujuan membantu pelaku UMKM masuk ke pasar online dengan dukungan pelatihan dan infrastruktur digital.",
+      image: "/news1.jpg",
+      date: "2025-08-10",
     },
     {
       id: 2,
-      name: "Warung Makan Sederhana",
-      description:
-        "Hidangan rumahan yang lezat dengan cita rasa autentik dan harga ramah di kantong.",
-      image: "/umkm1.jpeg",
+      title: "Festival Kuliner Nusantara Kembali Digelar",
+      content:
+        "Acara tahunan ini menghadirkan beragam hidangan khas daerah dari seluruh Indonesia.",
+      image: "/news2.jpg",
+      date: "2025-08-09",
     },
     {
       id: 3,
-      name: "Laundry Express",
-      description:
-        "Jasa laundry kiloan dengan pelayanan cepat dan bersih untuk kebutuhan cucian Anda.",
-      image: "/umkm1.jpeg",
+      title: "Startup Lokal Raih Pendanaan Series A",
+      content:
+        "Startup teknologi pendidikan ini berhasil mendapatkan investasi untuk ekspansi ke pasar Asia Tenggara.",
+      image: "/news3.jpg",
+      date: "2025-08-08",
     },
     {
       id: 4,
-      name: "Toko Kue Manis",
-      description:
-        "Aneka kue basah dan kering dengan resep tradisional yang telah teruji lezat.",
-      image: "/umkm1.jpeg",
+      title: "Harga Beras Turun di Pasar Tradisional",
+      content:
+        "Harga beras di beberapa daerah mengalami penurunan setelah panen raya.",
+      image: "/news4.jpg",
+      date: "2025-08-07",
     },
     {
       id: 5,
-      name: "Bengkel Motor Jaya",
-      description:
-        "Servis motor profesional dengan teknisi berpengalaman dan spare part original.",
-      image: "/umkm1.jpeg",
+      title: "Perkembangan AI di Indonesia Semakin Pesat",
+      content:
+        "Banyak perusahaan mulai mengadopsi teknologi kecerdasan buatan untuk meningkatkan efisiensi operasional.",
+      image: "/news5.jpg",
+      date: "2025-08-06",
     },
     {
       id: 6,
-      name: "Toko Baju Fashion",
-      description:
-        "Koleksi pakaian trendy dan berkualitas untuk pria dan wanita dengan harga terjangkau.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 7,
-      name: "Salon Kecantikan Elok",
-      description:
-        "Layanan perawatan kecantikan lengkap dengan peralatan modern dan terapis profesional.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 8,
-      name: "Toko Elektronik Murah",
-      description:
-        "Penjualan peralatan elektronik dengan harga kompetitif dan garansi resmi.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 9,
-      name: "Kedai Kopi Hangat",
-      description:
-        "Menyajikan kopi premium dengan suasana hangat dan nyaman untuk bersantai.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 10,
-      name: "Toko Buku Pintar",
-      description:
-        "Koleksi buku lengkap mulai dari buku pelajaran hingga novel terbaru.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 11,
-      name: "Apotek Sehat",
-      description:
-        "Apotek lengkap dengan obat-obatan dan vitamin untuk kesehatan keluarga.",
-      image: "/umkm1.jpeg",
-    },
-    {
-      id: 12,
-      name: "Toko Sepatu Berkualitas",
-      description:
-        "Koleksi sepatu untuk segala usia dengan model terkini dan harga terjangkau.",
-      image: "/umkm1.jpeg",
+      title: "Konser Musik Amal untuk Korban Bencana",
+      content:
+        "Sejumlah musisi terkenal menggelar konser untuk menggalang dana bagi korban bencana alam.",
+      image: "/news6.jpg",
+      date: "2025-08-05",
     },
   ];
 
-  // Fungsi untuk mengambil data - nanti akan diganti dengan API call
-  const fetchUMKMData = async (page: number) => {
+  const fetchNewsData = async (page: number) => {
     setLoading(true);
-    // Simulasi loading
     await new Promise((resolve) => setTimeout(resolve, 500));
     setLoading(false);
   };
 
-  // Menghitung data untuk halaman saat ini
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = allUMKMData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = allNewsData.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Menghitung total halaman
-  const totalPages = Math.ceil(allUMKMData.length / itemsPerPage);
+  const totalPages = Math.ceil(allNewsData.length / itemsPerPage);
 
-  // Fungsi untuk pindah halaman
   const goToPage = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    fetchUMKMData(pageNumber);
+    fetchNewsData(pageNumber);
   };
 
-  // Fungsi untuk halaman sebelumnya
   const goToPrevPage = () => {
-    if (currentPage > 1) {
-      goToPage(currentPage - 1);
-    }
+    if (currentPage > 1) goToPage(currentPage - 1);
   };
 
-  // Fungsi untuk halaman selanjutnya
   const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      goToPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) goToPage(currentPage + 1);
   };
 
-  // Generate nomor halaman untuk pagination
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxVisiblePages = 5;
 
     if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(i);
-      }
+      for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
     } else {
       if (currentPage <= 3) {
-        for (let i = 1; i <= 5; i++) {
-          pageNumbers.push(i);
-        }
+        for (let i = 1; i <= 5; i++) pageNumbers.push(i);
       } else if (currentPage >= totalPages - 2) {
-        for (let i = totalPages - 4; i <= totalPages; i++) {
+        for (let i = totalPages - 4; i <= totalPages; i++)
           pageNumbers.push(i);
-        }
       } else {
-        for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+        for (let i = currentPage - 2; i <= currentPage + 2; i++)
           pageNumbers.push(i);
-        }
       }
     }
-
     return pageNumbers;
   };
 
   useEffect(() => {
-    fetchUMKMData(currentPage);
+    fetchNewsData(currentPage);
   }, [currentPage]);
 
   return (
@@ -178,21 +124,20 @@ export default function UMKMPage() {
       <Navbar />
       <div className="min-h-screen bg-gray-100">
         <div className="p-8 bg-gray-100">
-          <h1 className="text-3xl text-black font-bold">UMKM</h1>
+          <h1 className="text-3xl text-black font-bold">Berita</h1>
           <p className="text-black">
-            Welcome to the UMKM application. Here you can manage your UMKM data.
+            Temukan berita terbaru dan informasi terkini di sini.
           </p>
         </div>
 
         <div className="container mx-auto px-8">
-          {/* Loading State */}
           {loading ? (
             <div className="flex justify-center items-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
             </div>
           ) : (
             <>
-              {/* UMKM Cards Grid */}
+              {/* News Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {currentItems.map((item) => (
                   <div
@@ -201,17 +146,24 @@ export default function UMKMPage() {
                   >
                     <Image
                       src={item.image}
-                      alt={item.name}
+                      alt={item.title}
                       width={300}
                       height={200}
                       className="w-full h-48 object-cover"
                     />
                     <div className="p-4">
+                      <span className="text-sm text-gray-500">
+                        {new Date(item.date).toLocaleDateString("id-ID", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </span>
                       <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                        {item.name}
+                        {item.title}
                       </h3>
                       <p className="text-gray-600 text-sm">
-                        {item.description}
+                        {item.content}
                       </p>
                     </div>
                   </div>
@@ -220,7 +172,6 @@ export default function UMKMPage() {
 
               {/* Pagination */}
               <div className="flex justify-center items-center space-x-2 py-8">
-                {/* Previous Button */}
                 <button
                   onClick={goToPrevPage}
                   disabled={currentPage === 1}
@@ -232,8 +183,6 @@ export default function UMKMPage() {
                 >
                   ⏮
                 </button>
-
-                {/* Page Numbers */}
                 {getPageNumbers().map((pageNumber) => (
                   <button
                     key={pageNumber}
@@ -247,8 +196,6 @@ export default function UMKMPage() {
                     {pageNumber}
                   </button>
                 ))}
-
-                {/* Next Button */}
                 <button
                   onClick={goToNextPage}
                   disabled={currentPage === totalPages}
@@ -262,11 +209,11 @@ export default function UMKMPage() {
                 </button>
               </div>
 
-              {/* Pagination Info */}
+              {/* Info */}
               <div className="text-center text-gray-600 pb-8">
                 Menampilkan {indexOfFirstItem + 1} sampai{" "}
-                {Math.min(indexOfLastItem, allUMKMData.length)} dari{" "}
-                {allUMKMData.length} hasil
+                {Math.min(indexOfLastItem, allNewsData.length)} dari{" "}
+                {allNewsData.length} berita
               </div>
             </>
           )}
