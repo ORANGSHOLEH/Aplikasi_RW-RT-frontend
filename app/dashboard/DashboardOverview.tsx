@@ -43,6 +43,7 @@ export default function DashboardOverview({
           </button>
         )}
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
         <div className="bg-indigo-50 p-6 rounded-lg shadow flex flex-col items-center hover:shadow-lg transition">
           <BuildingStorefrontIcon className="h-10 w-10 text-indigo-600 mb-2" />
@@ -66,15 +67,16 @@ export default function DashboardOverview({
           <span className="mt-2 text-gray-700 font-medium">Loker Tidak Aktif</span>
         </div>
       </div>
+
+      <h1>Quick Action</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
         <button
           className="flex items-center justify-between bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-lg shadow transition group"
           onClick={() => onTabChange && onTabChange("umkm")}
         >
-        
-        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <BuildingStorefrontIcon className="h-7 w-7 text-white" />
-            <span className="font-semibold text-lg">Lihat Data UMKM</span>
+            <span className="font-semibold text-lg">Kelola Data UMKM</span>
           </div>
           <ArrowRightCircleIcon className="h-6 w-6 text-white group-hover:translate-x-1 transition" />
         </button>
@@ -84,10 +86,23 @@ export default function DashboardOverview({
         >
           <div className="flex items-center gap-3">
             <BriefcaseIcon className="h-7 w-7 text-white" />
-            <span className="font-semibold text-lg">Lihat Data Loker</span>
+            <span className="font-semibold text-lg">Kelola Data Loker</span>
           </div>
           <ArrowRightCircleIcon className="h-6 w-6 text-white group-hover:translate-x-1 transition" />
         </button>
+      </div>
+      {/* Ringkasan Sistem */}
+      <div className="mt-8 bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-bold text-gray-800 mb-2">Ringkasan Sistem</h3>
+        <p className="text-gray-700 text-sm">
+          Sistem Informasi RW/RT ini dirancang untuk memudahkan pengelolaan data warga, UMKM, lowongan kerja, berita, dan administrasi secara digital. Admin dapat mengakses statistik, melakukan update data, serta memberikan informasi terbaru kepada masyarakat dengan cepat dan efisien.
+        </p>
+        <ul className="mt-4 list-disc list-inside text-gray-600 text-sm">
+          <li>Manajemen data UMKM dan lowongan kerja</li>
+          <li>Penyajian statistik dan informasi penting</li>
+          <li>Fitur quick access untuk admin</li>
+          <li>Update berita dan informasi warga</li>
+        </ul>
       </div>
     </div>
   );

@@ -2,6 +2,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import LokerForm from "../dashboard/form/inputLoker/page";
+import {
+  PencilSquareIcon,
+  TrashIcon,
+  EyeIcon,
+} from "@heroicons/react/24/outline";
 
 export default function LokerTab({
   lokerData,
@@ -83,27 +88,33 @@ export default function LokerTab({
                       {loker.is_active ? "Aktif" : "Nonaktif"}
                     </button>
                   </td>
-                  <td className="px-6 py-4 flex space-x-2">
+                  <td className="px-6 py-4 flex gap-2">
                     <button
                       onClick={() => {
                         setCurrentLoker(loker);
                         setIsDetailOpen(true);
                       }}
-                      className="text-blue-600 hover:text-blue-800 text-sm"
+                      className="flex items-center justify-center bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-800 px-2 py-1 rounded transition"
+                      title="Detail"
                     >
-                      Detail
+                      <EyeIcon className="h-5 w-5" />
                     </button>
                     <button
                       onClick={() => {
                         setCurrentLoker(loker);
                         setIsModalOpen(true);
                       }}
-                      className="text-yellow-600 hover:text-yellow-800 text-sm"
+                      className="flex items-center justify-center bg-yellow-50 hover:bg-yellow-100 text-yellow-600 hover:text-yellow-800 px-2 py-1 rounded transition"
+                      title="Edit"
                     >
-                      Edit
+                      <PencilSquareIcon className="h-5 w-5" />
                     </button>
-                    <button onClick={() => deleteLoker(loker.id)} className="text-red-600 hover:text-red-800 text-sm">
-                      Hapus
+                    <button
+                      onClick={() => deleteLoker(loker.id)}
+                      className="flex items-center justify-center bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-800 px-2 py-1 rounded transition"
+                      title="Hapus"
+                    >
+                      <TrashIcon className="h-5 w-5" />
                     </button>
                   </td>
                 </tr>
