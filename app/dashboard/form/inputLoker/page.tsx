@@ -1,392 +1,125 @@
 "use client";
+import { useState } from "react";
+import { API_BASE_URL, API_ENDPOINTS } from "@/app/lib/config";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { API_BASE_URL, API_ENDPOINTS } from "../../../lib/config";
-
-interface LokerFormData {
-  nama_perusahaan: string;
-  alamat_perusahaan: string;
-  kontak: string;
-  posisi: string;
-  gaji: string;
-  syarat: string;
-  waktu_kerja: string;
-  tempat_kerja: string;
-  gambar?: File | null;
-  is_active: boolean;
-}
-
-export default function InputLokerPage() {
-  const [form, setForm] = useState<LokerFormData>({
-    nama_perusahaan: "",
-    alamat_perusahaan: "",
-    kontak: "",
-    posisi: "",
-    gaji: "",
-    syarat: "",
-    waktu_kerja: "",
-    tempat_kerja: "",
-    gambar: null,
-    is_active: true,
+export default function LokerForm({ initialData, onClose, onSave }: any) {
+  const [form, setForm] = useState({
+    nama_perusahaan: initialData?.nama_perusahaan || "",
+    alamat_perusahaan: initialData?.alamat_perusahaan || "",
+    kontak: initialData?.kontak || "",
+    posisi: initialData?.posisi || "",
+    gaji: initialData?.gaji || "",
+    syarat: initialData?.syarat || "",
+    waktu_kerja: initialData?.waktu_kerja || "",
+    tempat_kerja: initialData?.tempat_kerja || "",
+    gambar: null as File | null,
+    is_active: initialData?.is_active ?? true,
   });
+  const [preview, setPreview] = useState(initialData?.url_gambar || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const router = useRouter();
+  const handleChange = (e: any) => {
+    const { name, value, type, checked, files } = e.target;
+    if (type === "checkbox") setForm({ ...form, [name]: checked });
+    else if (type === "file") {
+      const file = files[0];
+      setForm({ ...form, gambar: file });
+      setPreview(URL.createObjectURL(file));
+    } else setForm({ ...form, [name]: value });
+  };
 
-  useEffect(() => {
+  
+const handleSubmit = async (e: any) => {
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
+  try {
     const token = localStorage.getItem("token");
-    if (!token) {
-      router.replace("/login");
-    }
-  }, [router]);
+    if (!token) throw new Error("Token tidak ditemukan");
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { name, value, type } = e.target;
-
-    if (type === "checkbox") {
-      const checked = (e.target as HTMLInputElement).checked;
-      setForm({ ...form, [name]: checked });
-    } else if (type === "file") {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      setForm({ ...form, gambar: file || null });
-
-      // Preview gambar
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
+    const formData = new FormData();
+    Object.entries(form).forEach(([key, value]) => {
+      if (key === "gambar") {
+        // Hanya kirim gambar jika ada file baru
+        if (value) formData.append("gambar", value as File);
+      } else if (key === "is_active") {
+        formData.append("is_active", value ? "1" : "0");
       } else {
-        setImagePreview(null);
+        formData.append(key, value as string);
       }
-    } else {
-      setForm({ ...form, [name]: value });
+    });
+
+    // Cek mode edit atau tambah
+    const isEdit = !!initialData?.id;
+    const url = isEdit
+      ? `${API_BASE_URL}${API_ENDPOINTS.LOKER}/${initialData.id}`
+      : `${API_BASE_URL}${API_ENDPOINTS.LOKER}`;
+    const method = isEdit ? "POST" : "POST"; // Laravel: POST + _method=PUT
+
+    if (isEdit) formData.append("_method", "PUT");
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.message || "Gagal menyimpan data loker");
     }
-  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
-
-    try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setError("Token tidak ditemukan. Silakan login ulang.");
-        router.push("/login");
-        return;
-      }
-
-      // Gunakan FormData untuk upload file
-      const formData = new FormData();
-      formData.append("nama_perusahaan", form.nama_perusahaan);
-      formData.append("alamat_perusahaan", form.alamat_perusahaan);
-      formData.append("kontak", form.kontak);
-      formData.append("posisi", form.posisi);
-      formData.append("gaji", form.gaji);
-      formData.append("syarat", form.syarat);
-      formData.append("waktu_kerja", form.waktu_kerja);
-      formData.append("tempat_kerja", form.tempat_kerja);
-
-      // Convert boolean ke string yang benar untuk Laravel
-      formData.append("is_active", form.is_active ? "1" : "0");
-
-      if (form.gambar) {
-        formData.append("gambar", form.gambar);
-      }
-
-      console.log("Sending request to:", `${API_BASE_URL}/loker`);
-      console.log("FormData entries:");
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
-
-      const res = await fetch(`${API_BASE_URL}/loker`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      console.log("Response status:", res.status);
-
-      const data = await res.json();
-      console.log("Response data:", data);
-
-      if (res.ok && data.success) {
-        setSuccess(data.message || "Data loker berhasil disimpan.");
-        setForm({
-          nama_perusahaan: "",
-          alamat_perusahaan: "",
-          kontak: "",
-          posisi: "",
-          gaji: "",
-          syarat: "",
-          waktu_kerja: "",
-          tempat_kerja: "",
-          gambar: null,
-          is_active: true,
-        });
-        setImagePreview(null);
-        setTimeout(() => router.push("/dashboard"), 1500);
-      } else {
-        if (data.errors) {
-          const errorMessages = Object.values(data.errors).flat().join(", ");
-          setError(`Validation errors: ${errorMessages}`);
-        } else {
-          setError(data.message || "Gagal menyimpan data loker.");
-        }
-      }
-    } catch (err: any) {
-      console.error("Full error:", err);
-      setError(`Terjadi kesalahan: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+    onSave();
+    onClose();
+  } catch (err: any) {
+    setError(err.message || "Terjadi kesalahan saat menyimpan");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-8 px-4">
-      <div className="max-w-2xl w-full bg-white p-8 rounded-lg shadow">
-        <h2 className="text-2xl text-black font-bold mb-6 text-center">
-          Input Data Lowongan Kerja
-        </h2>
-
-        {error && (
-          <div className="mb-4 text-red-600 bg-red-50 p-3 rounded">{error}</div>
-        )}
-        {success && (
-          <div className="mb-4 text-green-600 bg-green-50 p-3 rounded">
-            {success}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Upload Gambar */}
-          <div>
-            <label
-              htmlFor="gambar"
-              className="block mb-1 font-medium text-black"
-            >
-              Gambar Perusahaan
-            </label>
-            <input
-              type="file"
-              id="gambar"
-              name="gambar"
-              accept="image/*"
-              onChange={handleChange}
-              className="w-full border px-3 py-2 rounded text-black"
-            />
-            {imagePreview && (
-              <div className="mt-2">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-32 h-32 object-cover rounded border"
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Nama Perusahaan */}
-          <div>
-            <label
-              htmlFor="nama_perusahaan"
-              className="block mb-1 font-medium text-black"
-            >
-              Nama Perusahaan
-            </label>
-            <input
-              type="text"
-              id="nama_perusahaan"
-              name="nama_perusahaan"
-              value={form.nama_perusahaan}
-              onChange={handleChange}
-              required
-              className="w-full border px-3 py-2 rounded text-black"
-              maxLength={255}
-            />
-          </div>
-
-          {/* Posisi */}
-          <div>
-            <label
-              htmlFor="posisi"
-              className="block mb-1 font-medium text-black"
-            >
-              Posisi
-            </label>
-            <input
-              type="text"
-              id="posisi"
-              name="posisi"
-              value={form.posisi}
-              onChange={handleChange}
-              required
-              className="w-full border px-3 py-2 rounded text-black"
-              maxLength={255}
-            />
-          </div>
-
-          {/* Alamat Perusahaan */}
-          <div>
-            <label
-              htmlFor="alamat_perusahaan"
-              className="block mb-1 font-medium text-black"
-            >
-              Alamat Perusahaan
-            </label>
-            <textarea
-              id="alamat_perusahaan"
-              name="alamat_perusahaan"
-              value={form.alamat_perusahaan}
-              onChange={handleChange}
-              required
-              rows={3}
-              className="w-full border px-3 py-2 rounded text-black"
-            />
-          </div>
-
-          {/* Kontak */}
-          <div>
-            <label
-              htmlFor="kontak"
-              className="block mb-1 font-medium text-black"
-            >
-              Kontak
-            </label>
-            <input
-              type="text"
-              id="kontak"
-              name="kontak"
-              value={form.kontak}
-              onChange={handleChange}
-              required
-              className="w-full border px-3 py-2 rounded text-black"
-              maxLength={255}
-              placeholder="email@perusahaan.com / 021-12345678"
-            />
-          </div>
-
-          {/* Gaji */}
-          <div>
-            <label htmlFor="gaji" className="block mb-1 font-medium text-black">
-              Gaji
-            </label>
-            <input
-              type="text"
-              id="gaji"
-              name="gaji"
-              value={form.gaji}
-              onChange={handleChange}
-              required
-              className="w-full border px-3 py-2 rounded text-black"
-              maxLength={255}
-              placeholder="Rp 5.000.000 - Rp 8.000.000"
-            />
-          </div>
-
-          {/* Waktu Kerja */}
-          <div>
-            <label
-              htmlFor="waktu_kerja"
-              className="block mb-1 font-medium text-black"
-            >
-              Waktu Kerja
-            </label>
-            <select
-              id="waktu_kerja"
-              name="waktu_kerja"
-              value={form.waktu_kerja}
-              onChange={handleChange}
-              required
-              className="w-full border px-3 py-2 rounded text-black"
-            >
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
+        <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-lg w-full z-10">
+          <h3 className="text-lg font-medium mb-4">{initialData ? "Edit Loker" : "Tambah Loker"}</h3>
+          {error && <div className="mb-2 text-red-600">{error}</div>}
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <input name="nama_perusahaan" value={form.nama_perusahaan} onChange={handleChange} placeholder="Nama Perusahaan" className="w-full border px-3 py-2 rounded" required />
+            <input name="posisi" value={form.posisi} onChange={handleChange} placeholder="Posisi" className="w-full border px-3 py-2 rounded" required />
+            <textarea name="alamat_perusahaan" value={form.alamat_perusahaan} onChange={handleChange} placeholder="Alamat Perusahaan" className="w-full border px-3 py-2 rounded" required />
+            <input name="kontak" value={form.kontak} onChange={handleChange} placeholder="Kontak" className="w-full border px-3 py-2 rounded" required />
+            <input name="gaji" value={form.gaji} onChange={handleChange} placeholder="Gaji" className="w-full border px-3 py-2 rounded" required />
+            <select name="waktu_kerja" value={form.waktu_kerja} onChange={handleChange} className="w-full border px-3 py-2 rounded" required>
               <option value="">Pilih Waktu Kerja</option>
               <option value="Full-Time">Full-Time</option>
               <option value="Part-Time">Part-Time</option>
               <option value="Freelance">Freelance</option>
             </select>
-          </div>
-
-          {/* Tempat Kerja */}
-          <div>
-            <label
-              htmlFor="tempat_kerja"
-              className="block mb-1 font-medium text-black"
-            >
-              Tempat Kerja
-            </label>
-            <select
-              id="tempat_kerja"
-              name="tempat_kerja"
-              value={form.tempat_kerja}
-              onChange={handleChange}
-              required
-              className="w-full border px-3 py-2 rounded text-black"
-            >
+            <select name="tempat_kerja" value={form.tempat_kerja} onChange={handleChange} className="w-full border px-3 py-2 rounded" required>
               <option value="">Pilih Tempat Kerja</option>
               <option value="On-Site">On-Site</option>
               <option value="Work From Home">Work From Home</option>
             </select>
-          </div>
-
-          {/* Syarat */}
-          <div>
-            <label
-              htmlFor="syarat"
-              className="block mb-1 font-medium text-black"
-            >
-              Syarat dan Kualifikasi
+            <textarea name="syarat" value={form.syarat} onChange={handleChange} placeholder="Syarat dan Kualifikasi" className="w-full border px-3 py-2 rounded" required />
+            <input type="file" name="gambar" accept="image/*" onChange={handleChange} className="w-full" />
+            {preview && <img src={preview} alt="Preview" className="w-32 h-32 object-cover rounded border" />}
+            <label className="flex items-center space-x-2">
+              <input type="checkbox" name="is_active" checked={form.is_active} onChange={handleChange} />
+              <span>Lowongan Aktif</span>
             </label>
-            <textarea
-              id="syarat"
-              name="syarat"
-              value={form.syarat}
-              onChange={handleChange}
-              required
-              rows={4}
-              className="w-full border px-3 py-2 rounded text-black"
-              placeholder="S1 Teknik Informatika, Menguasai React/Vue.js, Pengalaman minimal 2 tahun..."
-            />
-          </div>
-
-          {/* Status Aktif */}
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="is_active"
-              name="is_active"
-              checked={form.is_active}
-              onChange={handleChange}
-              className="mr-2"
-            />
-            <label htmlFor="is_active" className="font-medium text-black">
-              Lowongan Aktif
-            </label>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? "Menyimpan..." : "Simpan Data Loker"}
-          </button>
-        </form>
+            <div className="flex justify-end space-x-2">
+              <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 rounded">Batal</button>
+              <button type="submit" disabled={loading} className="px-4 py-2 bg-indigo-600 text-white rounded">
+                {loading ? "Menyimpan..." : "Simpan"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
