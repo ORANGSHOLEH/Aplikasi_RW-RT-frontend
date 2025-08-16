@@ -26,7 +26,8 @@ export default function BeritaPage() {
       id: 1,
       category: "Pemerintahan",
       title: "Penyaluran BLT Dana Desa 2025",
-      description: "Desa Ciwaruga aktif dalam menjalankan program BLT Dana Desa...",
+      description:
+        "Desa Ciwaruga aktif dalam menjalankan program BLT Dana Desa...",
       image: "/berita1.jpeg",
       author: "Administrator",
       views: 76,
@@ -46,7 +47,8 @@ export default function BeritaPage() {
       id: 3,
       category: "Infrastruktur",
       title: "Pengecoran Jalan Kabupaten",
-      description: "Pemerintah Desa bersama Kabupaten Bandung Barat melaksanakan...",
+      description:
+        "Pemerintah Desa bersama Kabupaten Bandung Barat melaksanakan...",
       image: "/berita3.jpeg",
       author: "Administrator",
       views: 43,
@@ -56,7 +58,8 @@ export default function BeritaPage() {
       id: 4,
       category: "Kunjungan Kerja",
       title: "Peninjauan Langsung oleh Dewan Komisi 3",
-      description: "Komisi 3 DPRD Kabupaten Bandung Barat meninjau progres perbaikan...",
+      description:
+        "Komisi 3 DPRD Kabupaten Bandung Barat meninjau progres perbaikan...",
       image: "/berita4.jpeg",
       author: "Administrator",
       views: 55,
@@ -66,7 +69,8 @@ export default function BeritaPage() {
       id: 5,
       category: "Pembinaan",
       title: "Pembinaan RT, RW, dan Linmas",
-      description: "Pembinaan bagi Ketua RT, RW, dan Linmas di Desa Ciwaruga...",
+      description:
+        "Pembinaan bagi Ketua RT, RW, dan Linmas di Desa Ciwaruga...",
       image: "/berita5.jpeg",
       author: "Administrator",
       views: 46,
@@ -118,7 +122,9 @@ export default function BeritaPage() {
       <div className="min-h-screen bg-gray-50 ">
         {/* Section Header */}
         <div className="container mx-auto px-6 py-10 text-center pt-30">
-          <h2 className="text-sm uppercase font-semibold text-emerald-500">Ciwaruga News</h2>
+          <h2 className="text-sm uppercase font-semibold text-emerald-500">
+            Ciwaruga News
+          </h2>
           <h1 className="text-3xl md:text-4xl font-bold text-[#004B50] mt-2">
             Berita <span className="text-emerald-500">Terbaru</span>
           </h1>
@@ -157,7 +163,9 @@ export default function BeritaPage() {
                     <h3 className="text-lg font-bold text-[#004B50] mb-2 hover:text-emerald-600 cursor-pointer">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-4">{item.description}</p>
+                    <p className="text-sm text-gray-600 mb-4">
+                      {item.description}
+                    </p>
                     <div className="flex justify-between text-xs text-gray-500 border-t pt-3">
                       <span>✍ {item.author}</span>
                       <span>👁 {item.views}x</span>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Navbar from "../components/ui/Navbar";
 import Footer from "../components/ui/Footer";
 import PendudukChart from "../components/infografis/PendudukChart";
-import APBRWChart from "../components/infografis/APBRWChart.tsx";
+import APBRWChart from "../components/infografis/APBRWChart";
 import StuntingChart from "../components/infografis/StuntingChart";
 import BansosChart from "../components/infografis/BansosChart";
 import SDGsChart from "../components/infografis/SDGsChart";
@@ -24,17 +24,20 @@ export default function Infografis() {
     <>
       <Navbar />
       <main className="min-h-screen bg-gray-50">
-        {/* Header Section */}
-        <section className="py-12 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+        {/* Header Section - Using same colors as Berita */}
+        <section className="py-12 bg-primary-gradient text-white">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
+              <h2 className="text-sm uppercase font-semibold text-emerald-100">
+                Ciwaruga Data
+              </h2>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4">
                 INFOGRAFIS
               </h1>
-              <h2 className="text-2xl lg:text-3xl font-medium text-blue-100">
+              <h2 className="text-2xl lg:text-3xl font-medium text-gray-100">
                 RW 16 DESA CIWARUGA
               </h2>
-              <p className="mt-4 text-blue-100 max-w-2xl mx-auto">
+              <p className="mt-4 text-gray-100 max-w-2xl mx-auto">
                 Visualisasi data dan statistik terkini mengenai kondisi
                 demografis, ekonomi, dan sosial di wilayah RW 16 Desa Ciwaruga
               </p>
@@ -52,8 +55,8 @@ export default function Infografis() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     activeTab === tab.id
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-primary text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-emerald-100 hover:text-emerald-700"
                   }`}
                 >
                   <span className="mr-2">{tab.icon}</span>
@@ -64,27 +67,27 @@ export default function Infografis() {
           </div>
         </section>
 
-        {/* Quick Actions */}
+        {/* Quick Actions
         <section className="py-6 bg-white">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex flex-wrap gap-4">
               <button
                 onClick={() => setActiveTab("penduduk")}
-                className="flex items-center px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
+                className="flex items-center px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors"
               >
                 <span className="mr-2">👥</span>
                 Lihat Data Penduduk
               </button>
               <button
                 onClick={() => setActiveTab("apbrw")}
-                className="flex items-center px-4 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors"
+                className="flex items-center px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors"
               >
                 <span className="mr-2">💰</span>
                 Lihat Anggaran RW
               </button>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Tab Content */}
         <section className="py-8">

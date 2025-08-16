@@ -30,13 +30,11 @@ export default function PendudukChart() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-2xl font-bold text-gray-900">
-          Data Penduduk RW 16
-        </h3>
+        <h3 className="text-2xl font-bold text-primary">Data Penduduk RW 16</h3>
         <select
           value={selectedRT}
           onChange={(e) => setSelectedRT(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
         >
           <option value="all">Semua RT</option>
           {pendudukData.byRT.map((rt) => (
@@ -49,11 +47,11 @@ export default function PendudukChart() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+        <div className="card-primary rounded-lg p-6">
           <div className="flex items-center">
             <div className="text-3xl mr-4">👥</div>
             <div>
-              <p className="text-blue-100">Total Penduduk</p>
+              <p className="text-gray-200">Total Penduduk</p>
               <p className="text-3xl font-bold">
                 {pendudukData.total.toLocaleString()}
               </p>
@@ -61,11 +59,11 @@ export default function PendudukChart() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
+        <div className="card-emerald rounded-lg p-6">
           <div className="flex items-center">
             <div className="text-3xl mr-4">👨</div>
             <div>
-              <p className="text-green-100">Laki-Laki</p>
+              <p className="text-gray-200">Laki-Laki</p>
               <p className="text-3xl font-bold">
                 {pendudukData.lakiLaki.toLocaleString()}
               </p>
@@ -90,7 +88,9 @@ export default function PendudukChart() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Age Distribution */}
         <div className="bg-gray-50 rounded-lg p-6">
-          <h4 className="text-lg font-semibold mb-4">Distribusi Usia</h4>
+          <h4 className="text-lg font-semibold mb-4 text-primary">
+            Distribusi Usia
+          </h4>
           <div className="space-y-3">
             {pendudukData.byAge.map((age, index) => {
               const percentage = (age.count / pendudukData.total) * 100;
@@ -100,7 +100,7 @@ export default function PendudukChart() {
                   <div className="flex-1 mx-3">
                     <div className="bg-gray-200 rounded-full h-4">
                       <div
-                        className="bg-blue-500 h-4 rounded-full transition-all duration-500"
+                        className="bg-emerald-500 h-4 rounded-full transition-all duration-500"
                         style={{ width: `${percentage}%` }}
                       ></div>
                     </div>
@@ -116,16 +116,20 @@ export default function PendudukChart() {
 
         {/* RT Distribution */}
         <div className="bg-gray-50 rounded-lg p-6">
-          <h4 className="text-lg font-semibold mb-4">Distribusi per RT</h4>
+          <h4 className="text-lg font-semibold mb-4 text-primary">
+            Distribusi per RT
+          </h4>
           <div className="space-y-3">
             {pendudukData.byRT.map((rt, index) => (
               <div
                 key={index}
-                className="border border-gray-200 rounded-lg p-4 bg-white"
+                className="border border-gray-200 rounded-lg p-4 bg-white hover:shadow-md transition-shadow"
               >
                 <div className="flex justify-between items-center mb-2">
-                  <span className="font-medium">RT {rt.rt}</span>
-                  <span className="text-lg font-bold">{rt.total}</span>
+                  <span className="font-medium text-primary">RT {rt.rt}</span>
+                  <span className="text-lg font-bold text-emerald-600">
+                    {rt.total}
+                  </span>
                 </div>
                 <div className="flex space-x-4 text-sm text-gray-600">
                   <span>👨 {rt.lakiLaki}</span>
@@ -139,13 +143,16 @@ export default function PendudukChart() {
 
       {/* Gender Pie Chart Simulation */}
       <div className="bg-gray-50 rounded-lg p-6">
-        <h4 className="text-lg font-semibold mb-4">Rasio Jenis Kelamin</h4>
+        <h4 className="text-lg font-semibold mb-4 text-primary">
+          Rasio Jenis Kelamin
+        </h4>
         <div className="flex items-center justify-center">
           <div className="relative w-48 h-48">
             <div
-              className="absolute inset-0 rounded-full border-8 border-blue-500"
+              className="absolute inset-0 rounded-full border-8"
               style={{
-                background: `conic-gradient(#3b82f6 0deg ${
+                borderColor: "#10b981",
+                background: `conic-gradient(#004B50 0deg ${
                   (pendudukData.lakiLaki / pendudukData.total) * 360
                 }deg, #ec4899 ${
                   (pendudukData.lakiLaki / pendudukData.total) * 360
@@ -154,14 +161,16 @@ export default function PendudukChart() {
             ></div>
             <div className="absolute inset-4 bg-white rounded-full flex items-center justify-center">
               <div className="text-center">
-                <div className="text-2xl font-bold">{pendudukData.total}</div>
+                <div className="text-2xl font-bold text-primary">
+                  {pendudukData.total}
+                </div>
                 <div className="text-sm text-gray-600">Total</div>
               </div>
             </div>
           </div>
           <div className="ml-8 space-y-2">
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-blue-500 rounded mr-2"></div>
+              <div className="w-4 h-4 bg-primary rounded mr-2"></div>
               <span>
                 Laki-Laki: {pendudukData.lakiLaki} (
                 {((pendudukData.lakiLaki / pendudukData.total) * 100).toFixed(

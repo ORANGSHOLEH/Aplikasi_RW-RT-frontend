@@ -1,8 +1,21 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
+  --background: #ffffff;
+  --foreground: #000000;
+  --primary: #004b50;
+  --primary-light: #10b981;
+  --emerald: #10b981;
+  --emerald-100: #d1fae5;
+  --emerald-500: #10b981;
+  --emerald-600: #059669;
+  --emerald-700: #047857;
+  --teal-600: #0d9488;
+  --teal-700: #0f766e;
+  --teal-800: #115e59;
 }
 
 @theme inline {
@@ -22,13 +35,128 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: poppins,Arial, Helvetica, sans-serif;  
+  font-family: poppins, Arial, Helvetica, sans-serif;
 }
 
 html {
-  scroll-behavior: smooth;  
-} 
+  scroll-behavior: smooth;
+}
 
-a{
+a {
   text-decoration: none;
+}
+
+/* Custom utility classes for consistent theming */
+.text-primary {
+  color: var(--primary);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-primary-gradient {
+  background: linear-gradient(135deg, var(--primary), var(--teal-600));
+}
+
+.text-emerald {
+  color: var(--emerald);
+}
+
+.bg-emerald {
+  background-color: var(--emerald);
+}
+
+.border-emerald {
+  border-color: var(--emerald);
+}
+
+.hover-emerald:hover {
+  background-color: var(--emerald-100);
+  color: var(--emerald-700);
+}
+
+/* Button variants */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--teal-700);
+}
+
+.btn-emerald {
+  background-color: var(--emerald);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-emerald:hover {
+  background-color: var(--emerald-600);
+}
+
+/* Card variants */
+.card-primary {
+  background: linear-gradient(135deg, var(--primary), var(--teal-600));
+  color: white;
+}
+
+.card-emerald {
+  background: linear-gradient(135deg, var(--emerald), var(--emerald-600));
+  color: white;
+}
+
+/* Custom line-clamp utilities */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Custom Scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-emerald-300::-webkit-scrollbar-thumb {
+  background-color: #6ee7b7;
+  border-radius: 6px;
+}
+
+.scrollbar-track-gray-100::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+  border-radius: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #6ee7b7;
+  border-radius: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+  border-radius: 6px;
+}
+
+/* Hover effect on scrollbar */
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: #34d399;
+}
+
+/* Gradient background utility */
+.bg-primary-gradient {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
 }

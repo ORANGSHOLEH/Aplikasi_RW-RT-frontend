@@ -31,6 +31,7 @@ export default function AdminSidebar({
     { name: "UMKM", tab: "umkm", icon: ShoppingBagIcon },
     { name: "Loker", tab: "loker", icon: DocumentTextIcon },
     { name: "Profile", tab: "profile", icon: UserCircleIcon },
+    { name: "Infografis", tab: "infografis", icon: DocumentTextIcon },
   ];
 
   return (

@@ -42,13 +42,13 @@ export default function APBRWChart() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-2xl font-bold text-gray-900">
+        <h3 className="text-2xl font-bold text-primary">
           Anggaran Pendapatan dan Belanja RW (APBRW)
         </h3>
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
         >
           <option value="2024">Tahun 2024</option>
           <option value="2023">Tahun 2023</option>
@@ -58,11 +58,11 @@ export default function APBRWChart() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
+        <div className="card-emerald rounded-lg p-6">
           <div className="flex items-center">
             <div className="text-3xl mr-4">💰</div>
             <div>
-              <p className="text-green-100">Total Anggaran</p>
+              <p className="text-gray-200">Total Anggaran</p>
               <p className="text-xl font-bold">
                 {formatRupiah(apbrwData.totalAnggaran)}
               </p>
@@ -70,11 +70,11 @@ export default function APBRWChart() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+        <div className="card-primary rounded-lg p-6">
           <div className="flex items-center">
             <div className="text-3xl mr-4">📊</div>
             <div>
-              <p className="text-blue-100">Total Realisasi</p>
+              <p className="text-gray-200">Total Realisasi</p>
               <p className="text-xl font-bold">
                 {formatRupiah(apbrwData.totalRealisasi)}
               </p>
@@ -101,7 +101,9 @@ export default function APBRWChart() {
 
       {/* Budget by Category */}
       <div className="bg-gray-50 rounded-lg p-6">
-        <h4 className="text-lg font-semibold mb-4">Anggaran per Kategori</h4>
+        <h4 className="text-lg font-semibold mb-4 text-primary">
+          Anggaran per Kategori
+        </h4>
         <div className="space-y-4">
           {apbrwData.byCategory.map((item, index) => {
             const percentage = (item.anggaran / apbrwData.totalAnggaran) * 100;
@@ -110,10 +112,12 @@ export default function APBRWChart() {
             return (
               <div
                 key={index}
-                className="bg-white rounded-lg p-4 border border-gray-200"
+                className="bg-white rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow"
               >
                 <div className="flex justify-between items-center mb-2">
-                  <span className="font-medium">{item.category}</span>
+                  <span className="font-medium text-primary">
+                    {item.category}
+                  </span>
                   <span className="text-sm text-gray-600">
                     {percentage.toFixed(1)}% dari total
                   </span>
@@ -128,7 +132,7 @@ export default function APBRWChart() {
                   <div className="relative">
                     <div className="bg-gray-200 rounded-full h-3">
                       <div
-                        className="bg-green-500 h-3 rounded-full transition-all duration-500"
+                        className="bg-emerald-500 h-3 rounded-full transition-all duration-500"
                         style={{ width: `${realisasiPercentage}%` }}
                       ></div>
                     </div>
@@ -145,7 +149,9 @@ export default function APBRWChart() {
 
       {/* Quarterly Report */}
       <div className="bg-gray-50 rounded-lg p-6">
-        <h4 className="text-lg font-semibold mb-4">Laporan Triwulan</h4>
+        <h4 className="text-lg font-semibold mb-4 text-primary">
+          Laporan Triwulan
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {apbrwData.byQuarter.map((quarter, index) => {
             const realisasiPercentage =
@@ -154,10 +160,10 @@ export default function APBRWChart() {
             return (
               <div
                 key={index}
-                className="bg-white rounded-lg p-4 border border-gray-200"
+                className="bg-white rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow"
               >
                 <div className="text-center">
-                  <h5 className="font-semibold text-lg mb-2">
+                  <h5 className="font-semibold text-lg mb-2 text-primary">
                     {quarter.quarter}
                   </h5>
                   <div className="space-y-2">
@@ -169,7 +175,7 @@ export default function APBRWChart() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Realisasi</p>
-                      <p className="font-medium text-blue-600">
+                      <p className="font-medium text-emerald-600">
                         {formatRupiah(quarter.realisasi)}
                       </p>
                     </div>
@@ -178,7 +184,7 @@ export default function APBRWChart() {
                         <div
                           className={`h-2 rounded-full transition-all duration-500 ${
                             realisasiPercentage >= 80
-                              ? "bg-green-500"
+                              ? "bg-emerald-500"
                               : realisasiPercentage >= 60
                               ? "bg-yellow-500"
                               : "bg-red-500"
