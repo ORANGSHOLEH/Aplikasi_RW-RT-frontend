@@ -168,8 +168,8 @@ export default function FilterLoker({
                 handleFilterChange("gaji_max", range.max);
               }}
               className={`px-3 py-2 text-sm rounded-md border transition-colors ${
-                localFilters.gaji_min == range.min &&
-                localFilters.gaji_max == range.max
+                Number(localFilters.gaji_min) == range.min &&
+                Number(localFilters.gaji_max) == range.max
                   ? "bg-blue-500 text-white border-blue-500"
                   : "bg-white text-black border-gray-300 hover:bg-gray-50"
               }`}
